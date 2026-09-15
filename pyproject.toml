@@ -1,0 +1,137 @@
+[build-system]
+requires = ["setuptools>=42", "wheel", "setuptools-git-versioning>=2.0,<3"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[tool.setuptools-git-versioning]
+count_commits_from_version_file = true
+enabled = true
+version_file = "src/bruker_to_ismrmrd/VERSION"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"bruker_to_ismrmrd" = ["VERSION", "py.typed"]
+
+[project]
+name = "bruker_to_ismrmrd"
+description = "Convert Bruker MRI raw data to ISMRMRD format."
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dynamic = ["version"]
+keywords = ["MRI", "Bruker", "ISMRMRD", "conversion", "raw data"]
+authors = [{ name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+]
+dependencies = ["numpy>=1.23,<3.0", "ismrmrd>=1.14.1", "brukerapi>=0.4.0"]
+
+[project.optional-dependencies]
+tests = ["coverage", "pre-commit", "pytest", "pytest-cov", "pytest-xdist"]
+dev = ["bruker_to_ismrmrd[tests]"]
+
+[project.urls]
+"Repository" = "https://github.com/schuenke/bruker_to_ismrmrd"
+
+# PyTest section
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error"]
+addopts = "-n auto --dist loadfile"
+
+# MyPy section
+[tool.mypy]
+warn_return_any = false
+check_untyped_defs = true
+warn_no_return = true
+warn_unreachable = true
+enable_error_code = ["ignore-without-code"]
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["ismrmrd.*", "brukerapi.*"]
+ignore_missing_imports = true
+
+# Ruff section
+[tool.ruff]
+line-length = 120
+extend-exclude = ["__init__.py"]
+
+[tool.ruff.lint]
+select = [
+    "A",   # flake8-builtins
+    "ARG", # flake8-unused-arguments
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "COM", # flake8-commas
+    "D",   # pydocstyle
+    "E",   # pycodestyle errors
+    "F",   # Pyflakes
+    "FA",  # flake8-future-annotations
+    "I",   # isort
+    "N",   # pep8-naming
+    "NPY", # NumPy-specific rules
+    "RUF", # Ruff-specific rules
+    "S",   # flake8-bandit
+    "SIM", # flake8-simplify
+    "UP",  # pyupgrade
+    "PIE", # flake8-pie
+    "PTH", # flake8-use-pathlib
+    "T20", # flake8-print
+    "Q",   # flake8-quotes
+    "W",   # pycodestyle warnings
+    "YTT", # flake8-2020
+    "ERA", # flake8-eradicate
+]
+extend-select = [
+    "ANN001", #  type annotation for function argument
+    "ANN201", #  return type annonation public function
+    "ANN205", #  return type annonation static method
+    "ANN401", #  any type annotation
+    "BLE001", #  blind exception
+    "D107",   #  missing docstring in __init__
+    "D417",   #  undocumented-parameter
+]
+ignore = [
+    "N999",   #  invalid module name
+    "COM812", #  missing-trailing-comma (conflict with formatter)
+    "SIM108", #  if-else-block-instead-of-if-exp
+    "A005",   #  stdlib-module-shadowing
+    "S101",   #  use of assert
+]
+
+[tool.ruff.lint.isort]
+force-single-line = false
+split-on-trailing-comma = false
+
+[tool.ruff.lint.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.format]
+quote-style = "single"
+skip-magic-trailing-comma = false
+
+# Typos section
+[tool.typos.default]
+locale = "en-us"
+check-filename = false
+extend-ignore-re = [
+    "(?Rm)^.*(#|//)\\s*noqa:\\s*typos", # "# noqa: typos" to ignore typos
+]
+
+# Coverage section
+[tool.coverage.paths]
+source = ["src", "*/site-packages"]
+
+[tool.coverage.run]
+disable_warnings = ["module-not-measured"]
