@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run Tests
+    name: Run Tests and Coverage Report
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -26,18 +26,20 @@ jobs:
       - name: Install Package and Dependencies
         run: pip install .[tests]
 
-      - name: Run PyTest
+      - name: Run PyTest and Generate Coverage Report
         run: |
           pytest --junitxml=pytest.xml \
             --cov-report=term-missing:skip-covered \
-            --cov=bruker_to_ismrmrd
+            --cov=bruker_to_ismrmrd | tee pytest-coverage.txt
+        shell: bash
 
-      - name: Upload Test Report
+      - name: Upload PyTest Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-report-py${{ matrix.python-version }}
           path: |
+            pytest-coverage.txt
             pytest.xml
 
 concurrency:
