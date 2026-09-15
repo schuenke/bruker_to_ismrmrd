@@ -166,17 +166,15 @@ def _build_acquisition_system_information(dataset: object) -> xsd.acquisitionSys
 
 def _build_measurement_information(dataset: object) -> xsd.measurementInformationType:
     """Build measurement information (patient position, protocol name)."""
-    measurement_information = xsd.measurementInformationType()
-
     subject_position = get_str(dataset, 'SUBJECT_position')
-    if subject_position and subject_position in BRUKER_TO_PATIENT_POSITION:
-        measurement_information.patientPosition = BRUKER_TO_PATIENT_POSITION[subject_position]
+    patient_position = BRUKER_TO_PATIENT_POSITION.get(subject_position) if subject_position else None
 
     sequence_name = get_str(dataset, 'PULPROG', 'Method', 'ACQ_scan_name')
-    if sequence_name:
-        measurement_information.protocolName = sequence_name
 
-    return measurement_information
+    return xsd.measurementInformationType(
+        patientPosition=patient_position,
+        protocolName=sequence_name,
+    )
 
 
 def _build_subject_information(dataset: object) -> xsd.subjectInformationType | None:
