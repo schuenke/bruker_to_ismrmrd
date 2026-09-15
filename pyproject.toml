@@ -17,19 +17,10 @@ include-package-data = true
 name = "bruker_to_ismrmrd"
 description = "Convert Bruker MRI raw data to ISMRMRD format."
 readme = "README.md"
-license = "MIT"
 requires-python = ">=3.10,<3.14"
 dynamic = ["version"]
-keywords = [
-    "MRI",
-    "Bruker",
-    "ISMRMRD",
-    "conversion",
-    "raw data",
-]
-authors = [
-    { name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" },
-]
+keywords = ["MRI", "Bruker", "ISMRMRD", "conversion", "raw data"]
+authors = [{ name = "Patrick Schuenke", email = "patrick.schuenke@ptb.de" }]
 classifiers = [
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
@@ -39,20 +30,10 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
 ]
-dependencies = [
-    "numpy>=1.23,<3.0",
-    "ismrmrd>=1.14.1",
-    "brukerapi>=0.4.0",
-]
+dependencies = ["numpy>=1.23,<3.0", "ismrmrd>=1.14.1", "brukerapi>=0.4.0"]
 
 [project.optional-dependencies]
-tests = [
-    "coverage",
-    "pre-commit",
-    "pytest",
-    "pytest-cov",
-    "pytest-xdist",
-]
+tests = ["coverage", "pre-commit", "pytest", "pytest-cov", "pytest-xdist"]
 dev = ["bruker_to_ismrmrd[tests]"]
 
 [project.urls]
@@ -74,10 +55,7 @@ enable_error_code = ["ignore-without-code"]
 warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
-module = [
-    "ismrmrd.*",
-    "brukerapi.*",
-]
+module = ["ismrmrd.*", "brukerapi.*"]
 ignore_missing_imports = true
 
 # Ruff section
@@ -125,6 +103,7 @@ ignore = [
     "COM812", #  missing-trailing-comma (conflict with formatter)
     "SIM108", #  if-else-block-instead-of-if-exp
     "A005",   #  stdlib-module-shadowing
+    "S101",   #  use of assert
 ]
 
 [tool.ruff.lint.isort]
