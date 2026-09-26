@@ -4,8 +4,9 @@ Convert Bruker MRI raw data (fid / rawdata) to ISMRMRD format.
 
 Example
 -------
->>> from bruker_to_ismrmrd import convert
->>> mrd = convert('path/to/experiment/fid')
+>>> from bruker_to_ismrmrd import MrdData, convert
+>>> mrd = convert('path/to/experiment')
+>>> mrd = MrdData.from_bruker('path/to/experiment')  # equivalent
 >>> mrd.save('output.mrd')
 """
 

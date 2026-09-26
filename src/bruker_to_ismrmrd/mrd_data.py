@@ -2,7 +2,8 @@
 
 This module provides :class:`MrdData`, an in-memory equivalent of the
 HDF5-backed ``ismrmrd.File`` / ``Container`` classes.  It can be created
-programmatically, loaded from an MRD file, or saved back to one.
+programmatically, loaded from an MRD file, converted from Bruker raw
+data, or saved back to an MRD file.
 """
 
 from __future__ import annotations
@@ -106,3 +107,23 @@ class MrdData:
             waveforms=waveforms,
             images=images,
         )
+
+    @classmethod
+    def from_bruker(cls, raw_path: str | Path) -> MrdData:
+        """Convert Bruker raw data to ISMRMRD format.
+
+        Thin wrapper around :func:`bruker_to_ismrmrd.convert`.
+
+        Parameters
+        ----------
+        raw_path
+            Path to the Bruker experiment directory (containing acqp, method, fid)
+            or directly to the ``fid`` / ``rawdata.job0`` file.
+
+        Returns
+        -------
+            A new :class:`MrdData` instance containing the ISMRMRD header and acquisitions.
+        """
+        from bruker_to_ismrmrd.converter import convert
+
+        return convert(raw_path)

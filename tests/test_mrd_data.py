@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tempfile
 from pathlib import Path
+from unittest import mock
 
 import ismrmrd
 import numpy as np
@@ -132,6 +133,23 @@ class TestMrdDataSave:
             assert path.exists()
             loaded = MrdData.from_file(path, dataset_name='my_dataset')
             assert len(loaded.acquisitions) == 1
+
+
+# ---------------------------------------------------------------------------
+# from_bruker
+# ---------------------------------------------------------------------------
+
+
+class TestMrdDataFromBruker:
+    """Tests for ``MrdData.from_bruker``."""
+
+    def test_from_bruker_delegates_to_convert(self) -> None:
+        """Delegate conversion to the ``convert`` function and return its result."""
+        raw_path = Path('path/to/experiment')
+        with mock.patch('bruker_to_ismrmrd.converter.convert') as mock_convert:
+            result = MrdData.from_bruker(raw_path)
+            mock_convert.assert_called_once_with(raw_path)
+            assert result is mock_convert.return_value
 
 
 # ---------------------------------------------------------------------------
